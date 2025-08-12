@@ -39,7 +39,7 @@ require (
 )
 
 require (
-	github.com/gorilla/websocket v1.5.3 // indirect
+	github.com/gorilla/websocket v1.5.3
 	github.com/mmcloughlin/geohash v0.10.0 // indirect
 	github.com/rabbitmq/amqp091-go v1.10.0 // indirect
 	golang.org/x/net v0.43.0 // indirect
@@ -48,4 +48,4 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250811160224-6b04f9b4fc78 // indirect
 )
 
-require go.mongodb.org/mongo-driver v1.17.4 // indirect
+require go.mongodb.org/mongo-driver v1.17.4
