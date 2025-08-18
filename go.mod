@@ -40,12 +40,12 @@ require (
 
 require (
 	github.com/gorilla/websocket v1.5.3
-	github.com/mmcloughlin/geohash v0.10.0 // indirect
+	github.com/mmcloughlin/geohash v0.10.0
 	github.com/rabbitmq/amqp091-go v1.10.0 // indirect
 	golang.org/x/net v0.43.0 // indirect
 	golang.org/x/sys v0.35.0 // indirect
 	golang.org/x/text v0.28.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20250811230008-5f3141c8851a // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250818200422-3122310a409c // indirect
 )
 
 require go.mongodb.org/mongo-driver v1.17.4
