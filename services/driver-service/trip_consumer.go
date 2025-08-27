@@ -2,9 +2,10 @@ package main
 
 import (
 	"context"
-	"github.com/rabbitmq/amqp091-go"
 	"log"
 	"ride-sharing/shared/messaging"
+
+	"github.com/rabbitmq/amqp091-go"
 )
 
 type tripConsumer struct {
@@ -18,9 +19,8 @@ func NewTripConsumer(rabbitmq *messaging.RabbitMQ) *tripConsumer {
 }
 
 func (c *tripConsumer) Listen() error {
-	return c.rabbitmq.ConsumeMessages("hello", func(ctx context.Context, msg amqp091.Delivery) error {
+	return c.rabbitmq.ConsumeMessages(messaging.FindAvailableDriversQueue, func(ctx context.Context, msg amqp091.Delivery) error {
 		log.Printf("driver received message: %v", msg)
-
 		return nil
 	})
 }
