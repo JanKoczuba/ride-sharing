@@ -29,6 +29,7 @@ func NewGRPCHandler(server *grpc.Server, service domain.TripService, publisher *
 	pb.RegisterTripServiceServer(server, handler)
 	return handler
 }
+
 func (h *gRPCHandler) CreateTrip(ctx context.Context, req *pb.CreateTripRequest) (*pb.CreateTripResponse, error) {
 	fareID := req.GetRideFareID()
 	userID := req.GetUserID()
@@ -43,7 +44,7 @@ func (h *gRPCHandler) CreateTrip(ctx context.Context, req *pb.CreateTripRequest)
 		return nil, status.Errorf(codes.Internal, "failed to create the trip: %v", err)
 	}
 
-	if err := h.publisher.PublishTripCreated(ctx); err != nil {
+	if err := h.publisher.PublishTripCreated(ctx, trip); err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to publish the trip created event: %v", err)
 	}
 
