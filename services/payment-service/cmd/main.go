@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"ride-sharing/services/payment-service/internal/infrastructure/events"
 	"syscall"
 
 	"ride-sharing/services/payment-service/internal/infrastructure/stripe"
@@ -50,8 +51,6 @@ func main() {
 	// Service
 	svc := service.NewPaymentService(paymentProcessor)
 
-	log.Println(svc)
-
 	// RabbitMQ connection
 	rabbitmq, err := messaging.NewRabbitMQ(rabbitMqURI)
 	if err != nil {
@@ -60,6 +59,10 @@ func main() {
 	defer rabbitmq.Close()
 
 	log.Println("Starting RabbitMQ connection")
+
+	// Trip Consumer
+	tripConsumer := events.NewTripConsumer(rabbitmq, svc)
+	go tripConsumer.Listen()
 
 	// Wait for shutdown signal
 	<-ctx.Done()
