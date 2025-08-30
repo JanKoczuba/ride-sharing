@@ -110,10 +110,10 @@ func (r *RabbitMQ) PublishMessage(ctx context.Context, routingKey string, messag
 	}
 
 	return r.Channel.PublishWithContext(ctx,
-		TripExchange,
-		routingKey,
-		false,
-		false,
+		TripExchange, // exchange
+		routingKey,   // routing key
+		false,        // mandatory
+		false,        // immediate
 		amqp.Publishing{
 			ContentType:  "text/plain",
 			Body:         jsonMsg,
@@ -123,13 +123,13 @@ func (r *RabbitMQ) PublishMessage(ctx context.Context, routingKey string, messag
 
 func (r *RabbitMQ) setupExchangesAndQueues() error {
 	err := r.Channel.ExchangeDeclare(
-		TripExchange,
-		"topic",
-		true,
-		false,
-		false,
-		false,
-		nil,
+		TripExchange, // name
+		"topic",      // type
+		true,         // durable
+		false,        // auto-deleted
+		false,        // internal
+		false,        // no-wait
+		nil,          // arguments
 	)
 	if err != nil {
 		return fmt.Errorf("failed to declare exchange: %s: %v", TripExchange, err)
@@ -145,17 +145,25 @@ func (r *RabbitMQ) setupExchangesAndQueues() error {
 		return err
 	}
 
+	if err := r.declareAndBindQueue(
+		DriverCmdTripRequestQueue,
+		[]string{contracts.DriverCmdTripRequest},
+		TripExchange,
+	); err != nil {
+		return err
+	}
+
 	return nil
 }
 
 func (r *RabbitMQ) declareAndBindQueue(queueName string, messageTypes []string, exchange string) error {
 	q, err := r.Channel.QueueDeclare(
-		queueName,
-		true,
-		false,
-		false,
-		false,
-		nil,
+		queueName, // name
+		true,      // durable
+		false,     // delete when unused
+		false,     // exclusive
+		false,     // no-wait
+		nil,       // arguments
 	)
 	if err != nil {
 		log.Fatal(err)
